@@ -6,13 +6,25 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class RobotContainer {
+
+  CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+
+  CommandXboxController controller = new CommandXboxController(0);
+
   public RobotContainer() {
     configureBindings();
   }
 
-  private void configureBindings() {}
+  private void configureBindings() {
+    drivetrain
+        .setDefaultCommand(drivetrain.teleopDrive(controller::getLeftX, controller::getLeftY, controller::getRightX));
+
+    controller.start().onTrue(drivetrain.resetGyroCommand());
+  }
 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
