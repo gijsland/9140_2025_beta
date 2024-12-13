@@ -1,8 +1,11 @@
-package frc.robot.subsystems;
+package org.team9140.frc2025.subsystems;
 
 import static edu.wpi.first.units.Units.*;
 
 import java.util.function.DoubleSupplier;
+
+import org.team9140.frc2025.TunerConstants;
+
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain;
@@ -22,7 +25,6 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.TunerConstants;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -62,17 +64,13 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                     null,
                     this));
 
-    /*
-     * SysId routine for characterizing steer. This is used to find PID gains for
-     * the steer motors.
-     */
     @SuppressWarnings("unused")
     private final SysIdRoutine m_sysIdRoutineSteer = new SysIdRoutine(
             new SysIdRoutine.Config(
-                    null, // Use default ramp rate (1 V/s)
-                    Volts.of(7), // Use dynamic voltage of 7 V
-                    null, // Use default timeout (10 s)
-                    // Log state with SignalLogger class
+                    // SysIdRoutine takes 
+                    Volts.of(2.0).per(Second),
+                    Volts.of(7),
+                    Seconds.of(5),
                     state -> SignalLogger.writeString("SysIdSteer_State", state.toString())),
             new SysIdRoutine.Mechanism(
                     volts -> setControl(m_steerCharacterization.withVolts(volts)),
